@@ -3,6 +3,7 @@ package com.sparjapati.di
 import android.app.Application
 import androidx.room.Room
 import com.google.gson.Gson
+import com.sparjapati.searchAnything.data.local.Converters
 import com.sparjapati.searchAnything.data.local.WordInfoDao
 import com.sparjapati.searchAnything.data.local.WordInfoDatabase
 import com.sparjapati.searchAnything.data.remote.DictionaryApi
@@ -57,12 +58,12 @@ object WordInfoModule {
         app,
         WordInfoDatabase::class.java,
         "word_info_database.db"
-    ).addTypeConverter(GsonParser(Gson()))
+    ).addTypeConverter(Converters(GsonParser(Gson())))
         .build()
 
     @Provides
     @Singleton
-    fun provideWordsInfoDao(database: WordInfoDatabase) :WordInfoDao = database.dao
+    fun provideWordsInfoDao(database: WordInfoDatabase): WordInfoDao = database.dao
 
     @Provides
     @Singleton

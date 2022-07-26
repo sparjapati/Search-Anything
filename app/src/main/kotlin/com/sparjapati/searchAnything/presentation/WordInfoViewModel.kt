@@ -9,6 +9,7 @@ import com.sparjapati.core.utils.TextUtil
 import com.sparjapati.searchAnything.domain.useCases.GetWordInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
@@ -37,10 +38,11 @@ class WordInfoViewModel @Inject constructor(
     }
 
     fun onSearch(query: String) {
-        _searchQuery.value = query
+        _searchQuery.value = query.trim()
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            getWordInfo(query).onEach { result ->
+            delay(500L)
+            getWordInfo(query.trim()).onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
                         _wordInfoState.value = wordInfoState.value.copy(

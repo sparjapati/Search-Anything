@@ -2,34 +2,26 @@ package com.sparjapati.searchAnything.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 import com.sparjapati.searchAnything.data.local.entity.WordInfoEntity
-import com.sparjapati.searchAnything.domain.models.WordInfo
 
 data class WordInfoDto(
     @field:SerializedName("phonetic")
-    val phonetic: String,
+    val phonetic: String = "",
 
     @field:SerializedName("phonetics")
-    val phonetics: List<PhoneticsDto>,
+    val phonetics: List<PhoneticsDto> = emptyList(),
 
     @field:SerializedName("word")
-    val word: String,
+    val word: String = "",
 
     @field:SerializedName("meanings")
-    val meanings: List<MeaningsDto>,
+    val meanings: List<MeaningsDto> = emptyList(),
 
     @field:SerializedName("sourceUrls")
-    val sourceUrls: List<String>,
+    val sourceUrls: List<String> = emptyList(),
 
     @field:SerializedName("license")
     val license: LicenseDto,
 ) {
-    fun toWordInfo() = WordInfo(
-        phonetic = phonetic,
-        word = word,
-        meanings = meanings.map { it.toMeaning() },
-        sourceUrls = sourceUrls
-    )
-
     fun toWordInfoEntity() = WordInfoEntity(
         word = word,
         phonetic = phonetic,
