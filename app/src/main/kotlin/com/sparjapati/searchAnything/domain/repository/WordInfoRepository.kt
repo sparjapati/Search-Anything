@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface WordInfoRepository {
     fun getWordInfo(word: String): Flow<Resource<List<WordInfo>>>
+
+   suspend fun clearWordInfos()
 }

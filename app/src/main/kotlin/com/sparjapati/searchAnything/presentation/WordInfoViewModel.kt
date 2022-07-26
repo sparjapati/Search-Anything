@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sparjapati.core.utils.Resource
 import com.sparjapati.core.utils.TextUtil
-import com.sparjapati.searchAnything.domain.useCases.GetWordInfo
+import com.sparjapati.searchAnything.domain.useCases.DictionaryUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -15,11 +15,12 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class WordInfoViewModel @Inject constructor(
-    private val getWordInfo: GetWordInfo,
+    private val dictionaryUseCases: DictionaryUseCases,
 ) : ViewModel() {
 
     private val _searchQuery = mutableStateOf("")
@@ -42,7 +43,7 @@ class WordInfoViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(500L)
-            getWordInfo(query.trim()).onEach { result ->
+            dictionaryUseCases.getWordInfo(query.trim()).onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
                         _wordInfoState.value = wordInfoState.value.copy(
@@ -65,6 +66,17 @@ class WordInfoViewModel @Inject constructor(
                     }
                 }
             }.launchIn(this)
+        }
+    }
+
+    fun clearDatabase() {
+        viewModelScope.launch {
+            try {
+                dictionaryUseCases.clearWordsInfos()
+                _eventFlow.emit(UiEvent.ShowSnackBar(TextUtil.DynamicString("Database cleared")))
+            } catch (e: IOException) {
+                _eventFlow.emit(UiEvent.ShowSnackBar(TextUtil.DynamicString(e.message ?: "Unknown Error occurred")))
+            }
         }
     }
 

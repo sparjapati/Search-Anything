@@ -10,6 +10,8 @@ import com.sparjapati.searchAnything.data.remote.DictionaryApi
 import com.sparjapati.searchAnything.data.repository.WordInfoRepositoryImpl
 import com.sparjapati.searchAnything.data.utils.GsonParser
 import com.sparjapati.searchAnything.domain.repository.WordInfoRepository
+import com.sparjapati.searchAnything.domain.useCases.ClearWordsInfos
+import com.sparjapati.searchAnything.domain.useCases.DictionaryUseCases
 import com.sparjapati.searchAnything.domain.useCases.GetWordInfo
 import dagger.Module
 import dagger.Provides
@@ -73,6 +75,9 @@ object WordInfoModule {
 
     @Provides
     @Singleton
-    fun provideWordInfoUseCase(wordInfoRepository: WordInfoRepository): GetWordInfo = GetWordInfo(wordInfoRepository)
+    fun provideDictionaryUseCases(wordInfoRepository: WordInfoRepository) = DictionaryUseCases(
+        GetWordInfo(wordInfoRepository),
+        ClearWordsInfos(wordInfoRepository)
+    )
 
 }

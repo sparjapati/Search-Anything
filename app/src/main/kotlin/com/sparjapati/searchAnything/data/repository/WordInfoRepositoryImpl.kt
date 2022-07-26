@@ -35,4 +35,8 @@ class WordInfoRepositoryImpl(
         val newWordInfo = dao.getWordInfo(word).map { it.toWordInfo() }
         emit(Resource.Success(newWordInfo))
     }
+
+    override suspend fun clearWordInfos() {
+        dao.clearWordInfos()
+    }
 }
