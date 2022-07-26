@@ -1,4 +1,4 @@
-package com.sparjapati.searchAnything.ui.theme
+package com.sparjapati.searchAnything.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
